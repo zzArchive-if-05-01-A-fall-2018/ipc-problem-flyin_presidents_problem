@@ -12,7 +12,7 @@ example of the popular _Dining Philosophers Problem_
 
 ### Basic Idea
 
-The Basic Idea of our projekt is the normal _Dining Philosophers Problem_ concept. \
+The Basic Idea of our projekt is the normal _Dining Philosophers Problem_ concept.
 
 ### My Idea
 
