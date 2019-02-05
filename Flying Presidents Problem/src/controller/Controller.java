@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class Controller implements Initializable, Observer {
+public class Controller implements Initializable {
 
     @FXML
     public TextArea textArea1;
@@ -39,21 +39,21 @@ public class Controller implements Initializable, Observer {
 
 
     String[] names = {"Trump", "Steinmeier", "Xi Jinping", "Macron", "Putin"};
-    String[] temp = {"A", "B", "C", "D", "E"};
+    String[] jets = {"A", "B", "C", "D", "E"};
 
     JetFighter[] jetFighters = new JetFighter[5];
     Thread[] presidentsThreads = new Thread[5];
 
     public void initialize(URL url, ResourceBundle rb) {
-
+        //Start FXML
         if(!Main.isSplashLoaded){
-
             loadSplashScreen();
         }
 
+        //Dining Philosopher Start
         for (int i = 0; i < jetFighters.length; i++) {
 
-            jetFighters[i] = new JetFighter(temp[i]);
+            jetFighters[i] = new JetFighter(jets[i]);
         }
 
         for (int i = 0; i < presidentsThreads.length; i++) {
@@ -61,26 +61,20 @@ public class Controller implements Initializable, Observer {
             if (i != presidentsThreads.length - 1) {
 
                 President president = new President(jetFighters[i], jetFighters[i+1], names[i], this);
-                president.addObserver(this);
                 presidentsThreads[i] = new Thread(president);
 
             } else {
 
                 President president = new President(jetFighters[0], jetFighters[i], names[i], this);
-                president.addObserver(this);
                 presidentsThreads[i] = new Thread(president);
             }
         }
-
     }
 
     @FXML
     private void handleStartButtonOnAction(ActionEvent event) {
-
-        for (Thread t: presidentsThreads) {
-
-            t.start();
-        }
+        //Starts Threads
+        for (Thread t: presidentsThreads) { t.start(); }
     }
 
 
@@ -130,12 +124,5 @@ public class Controller implements Initializable, Observer {
                 }
             });
         }catch (IOException ex){}
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-        log.appendText(arg + "\n");
-
     }
 }

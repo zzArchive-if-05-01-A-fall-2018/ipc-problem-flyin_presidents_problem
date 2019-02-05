@@ -2,9 +2,7 @@ package model;
 
 import controller.Controller;
 
-import java.util.Observable;
-
-public class President extends Observable implements Runnable {
+public class President implements Runnable {
 
     private JetFighter jetFighter_left;
     private JetFighter jetFighter_right;
@@ -88,21 +86,13 @@ public class President extends Observable implements Runnable {
 
     @Override
     public void run() {
-
         try {
-
             Thread.sleep(1000);
-
         } catch (InterruptedException ex) {
-
             ex.printStackTrace();
         }
 
-        while (true) {
-
-            fly();
-
-        }
+        while (true) { fly(); }
     }
 }
 
