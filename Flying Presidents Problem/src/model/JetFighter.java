@@ -1,25 +1,30 @@
 package model;
 
-import java.util.concurrent.Semaphore;
-
 public class JetFighter {
 
-    public Semaphore jetFighter = new Semaphore(1);
-    public String jet_id;
+    private String name;
+    private boolean waiting = true;
+    private President occupiedBy;
 
-    public JetFighter(String jet_id){
-        this.jet_id = jet_id;
+    public JetFighter(String name){
+        this.name = name;
     }
 
-    public String getJetid() {
-        return jet_id;
+    public String getName() {
+        return name;
     }
 
-    public boolean protect_the_president_plane(){
-        return jetFighter.tryAcquire();
+    public boolean isWaiting() {
+        return waiting;
     }
 
-    public void leave_the_president_plane(){
-        jetFighter.release();
+    public President getOccupiedBy() {
+        return occupiedBy;
+    }
+
+    public void setOccupiedBy(President occupiedBy) {
+        this.occupiedBy = occupiedBy;
+        waiting = false;
+        if (occupiedBy == null) waiting = true;
     }
 }

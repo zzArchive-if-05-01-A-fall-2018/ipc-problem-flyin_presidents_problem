@@ -1,98 +1,47 @@
 package model;
 
-import controller.Controller;
+public class President {
 
-public class President implements Runnable {
+    private JetFighter[] jetfighters = new JetFighter[2];
+    private String name;
+    private int timesFlown = 0;
 
-    private JetFighter jetFighter_left;
-    private JetFighter jetFighter_right;
-    private String aircraftName;
-    private Controller controller;
-
-    public President(JetFighter jetFighter_left, JetFighter jetFighter_right, String name, Controller controller) {
-        this.jetFighter_left = jetFighter_left;
-        this.jetFighter_right = jetFighter_right;
-        this.aircraftName = name;
-        this.controller = controller;
+    public President(JetFighter jetFighter_left, JetFighter jetFighter_right, String name) {
+        this.jetfighters[0] = jetFighter_left;
+        this.jetfighters[1] = jetFighter_right;
+        this.name = name;
     }
 
-    public void fly() {
 
-        if (jetFighter_left.protect_the_president_plane()) {
-
-            if (jetFighter_right.protect_the_president_plane()) {
-
-                this.controller.log.setStyle("-fx-text-fill: red ;");
-                this.controller.log.appendText("President " + aircraftName + " is flying \n");
-
-                try {
-
-                    Thread.sleep(2000);
-                } catch (InterruptedException ex){
-                    ex.printStackTrace();
-                }
-
-                this.controller.textArea1.clear();
-
-                if(aircraftName.equals("Trump")) {
-
-                    this.controller.textArea1.appendText("Steinmeier \n Xi Jinping \n Macron \n Putin \n");
-
-                }else if(aircraftName.equals("Steinmeier")) {
-
-                    this.controller.textArea1.appendText("Trump \n Xi Jinping \n Macron \n Putin \n");
-
-                }else if(aircraftName.equals("Xi Jinping")) {
-
-                    this.controller.textArea1.appendText("Trump \n Steinmeier \n Macron \n Putin \n");
-
-                }else if(aircraftName.equals("Macron")) {
-
-                    this.controller.textArea1.appendText("Trump \n Steinmeier \n Xi Jinping \n Putin \n");
-
-                }else { // Putin
-                    this.controller.textArea1.appendText("Trump \n Steinmeier \n Xi Jinping \n Macron\n");
-                }
-
-
-                this.controller.log.appendText("President " + aircraftName + " is waiting! \n");
-
-
-
-                this.controller.textArea2.clear();
-
-                if(jetFighter_left.getJetid() == "A" && jetFighter_right.getJetid() == "B"){
-                    this.controller.textArea2.appendText("E\n");
-
-                }else if(jetFighter_left.getJetid() == "C" && jetFighter_right.getJetid() == "D"){
-
-                    this.controller.textArea2.appendText("B\n");
-
-                }else {
-
-                    this.controller.textArea2.appendText("A\n");
-
-                }
-
-                jetFighter_right.leave_the_president_plane();
-                jetFighter_left.leave_the_president_plane();
-
-            } else {
-
-                jetFighter_left.leave_the_president_plane();
+    public void tryToFly() {
+        for (int i = 0; i < 2; i++) {
+            if (jetfighters[i].isWaiting() || (jetfighters[i].getOccupiedBy().getTimesFlown() > this.timesFlown)){
+                jetfighters[i].setOccupiedBy(this);
             }
+            else return;
         }
     }
 
-    @Override
-    public void run() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
+    private int getTimesFlown() {
+        return timesFlown;
+    }
 
-        while (true) { fly(); }
+    public boolean checkFlight() {
+        if (jetfighters[0].getOccupiedBy() == this && jetfighters[1].getOccupiedBy() == this){
+            timesFlown++;
+            return true;
+        }
+        if (jetfighters[0].getOccupiedBy() == this) jetfighters[0].setOccupiedBy(null);
+        if (jetfighters[1].getOccupiedBy() == this) jetfighters[1].setOccupiedBy(null);
+        return false;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String jetsToString() {
+        return jetfighters[0].getName() + ", " + jetfighters[1].getName();
     }
 }
 
